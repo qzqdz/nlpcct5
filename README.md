@@ -44,3 +44,6 @@ python ./examples/run_glue.py
 --num_train_epochs 3.0     
 --output_dir ./output_dir/nlpcct5/
 
+
+paperwithcode中的开源多标签分类模型
+https://paperswithcode.com/task/multi-label-text-classification
