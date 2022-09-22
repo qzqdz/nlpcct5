@@ -28,6 +28,7 @@ CUDA_VISIBLE_DEVICES=7 python ./examples/run_glue.py
 --num_train_epochs 3.0     
 --output_dir ./output_dir/nlpcct5/
 
+pip install -e .
 我的训练命令：
 python ./examples/run_glue.py     
 --model_type bert     
