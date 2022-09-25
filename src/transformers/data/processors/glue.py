@@ -665,16 +665,23 @@ class Nlpcct5alllabelProcessor(DataProcessor):
 
 	def get_labels(self):
 		"""See base class."""
-
-		with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
-			labels = eval(f.read())
+		try:
+			with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
+				labels = eval(f.read())
+		except:
+			with open(r'D:\code\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
+				labels = eval(f.read())
 		return labels
 
 	def _create_examples(self, lines, set_type):
 		"""Creates examples for the training and dev sets."""
 		examples = []
-		with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
-			labels = eval(f.read())
+		try:
+			with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
+				labels = eval(f.read())
+		except:
+			with open(r'D:\code\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
+				labels = eval(f.read())
 		label_dict = dict(zip(labels, [*range(len(labels))]))
 
 
