@@ -17,11 +17,15 @@
 
 <p>5.src\transformers\data\metrics\__init__.py</p>
 <p>添加了一个新的metric，allnlpcct5，其作用和nlpcct5一样</p>
+<p>metrics将结果写入了记事本中，绝对路径</p>
 <p>6. src\transformers\modeling_xlnet.py </p>
 <p>添加标记点“动刀处”，方便索引</p>
 <p>7.src\transformers\data\processors\nlpcct5_all_label.txt </p>
 <p>把1530个列标签写入了txt中，在metric和processors中使用的是绝对路径！！！</p>
-
+<p>8.train_code.py </p>
+<p>记录训练命令的地方</p>
+<p>8.train_code.py </p>
+<p>记录训练命令的地方</p>
 
 训练命令：
 CUDA_VISIBLE_DEVICES=7 python ./examples/run_glue.py     
