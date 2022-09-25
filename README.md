@@ -4,12 +4,23 @@
 <p></p>
 说明：
 
-<p>2022/9/21</p>
+<p><h4>2022/9/21</h4></p>
 <p>1. src/transformers/data/processors/glue.py </p>
 <p>添加了一个nlpcct5的processor 我实验暂时只使用了level1的标签</p>
 <p>2. src/transformers/modeling_bert.py </p>
 <p>这里面添加了多标签分类的bert实现 修改了loss</p>
 <p>3.data为直接读取的json文件，但是需要改名为train_set.json和val_set.json</p>
+
+<p><h4>2022/9/25</h4></p>
+<p>4.src/transformers/data/processors/glue.py </p>
+<p>添加了一个allnlpcct5的processor 使用了levels的全量标签</p>
+
+<p>5.src\transformers\data\metrics\__init__.py</p>
+<p>添加了一个新的metric，allnlpcct5，其作用和nlpcct5一样</p>
+<p>6. src\transformers\modeling_xlnet.py </p>
+<p>添加标记点“动刀处”，方便索引</p>
+
+
 
 
 训练命令：
@@ -48,3 +59,4 @@ python ./examples/run_glue.py
 
 paperwithcode中的开源多标签分类模型
 https://paperswithcode.com/task/multi-label-text-classification
+

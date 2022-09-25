@@ -1183,6 +1183,7 @@ class BertForSequenceClassification(BertPreTrainedModel):
 
 		outputs = (logits,) + outputs[2:]  # add hidden states and attention if they are here
 
+		# 动刀处
 		if labels is not None:
 			if self.num_labels == 1:
 				#  We are doing regression

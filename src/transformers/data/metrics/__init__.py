@@ -26,6 +26,7 @@ except (AttributeError, ImportError):
 def is_sklearn_available():
 	return _has_sklearn
 
+import numpy as np
 
 if _has_sklearn:
 
@@ -49,7 +50,8 @@ if _has_sklearn:
 			"spearmanr": spearman_corr,
 			"corr": (pearson_corr + spearman_corr) / 2,
 		}
-
+	def sigmoid_function(x):
+		return 1/(1+np.exp(-x))
 	def glue_compute_metrics(task_name, preds, labels):
 		assert len(preds) == len(labels)
 		if task_name == "cola":
@@ -76,8 +78,40 @@ if _has_sklearn:
 			return {"acc": simple_accuracy(preds, labels)}
 		elif task_name == "desccls":
 			return {"acc": simple_accuracy(preds, labels)}
+		elif task_name == 'nlpcct5':
+			sigmoid_preds = sigmoid_function(preds)
+			sigmoid_preds = np.greater(sigmoid_preds,0.5).astype(np.float32)
+			micro_f1 = f1_score(labels,sigmoid_preds,average='micro')
+			macro_f1 = f1_score(labels,sigmoid_preds,average='macro')
+			with open(r'D:\study\model\nlpcc_base_bert\labels.txt','w',encoding='utf-8') as f:
+				f.write(str(labels.tolist()))
+			with open(r'D:\study\model\nlpcc_base_bert\pred.txt','w',encoding='utf-8') as f:
+				f.write(str(sigmoid_preds.tolist()))
+
+			return {
+				'acc':simple_accuracy(sigmoid_preds,labels),
+				'macro_f1':macro_f1,
+				'micro_f1':micro_f1
+			}
+		elif task_name == 'allnlpcct5':
+			sigmoid_preds = sigmoid_function(preds)
+			sigmoid_preds = np.greater(sigmoid_preds,0.5).astype(np.float32)
+			micro_f1 = f1_score(labels,sigmoid_preds,average='micro')
+			macro_f1 = f1_score(labels,sigmoid_preds,average='macro')
+			with open(r'D:\study\model\nlpcc_base_bert\labels.txt','w',encoding='utf-8') as f:
+				f.write(str(labels.tolist()))
+			with open(r'D:\study\model\nlpcc_base_bert\pred.txt','w',encoding='utf-8') as f:
+				f.write(str(sigmoid_preds.tolist()))
+
+			return {
+				'acc':simple_accuracy(sigmoid_preds,labels),
+				'macro_f1':macro_f1,
+				'micro_f1':micro_f1
+			}
+
 		else:
 			raise KeyError(task_name)
+
 
 	def xnli_compute_metrics(task_name, preds, labels):
 		assert len(preds) == len(labels)

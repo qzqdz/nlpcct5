@@ -641,6 +641,60 @@ class Nlpcct5Processor(DataProcessor):
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
 		return examples
 
+
+class Nlpcct5alllabelProcessor(DataProcessor):
+
+	"""Processor for the WNLI data set (GLUE version)."""
+
+	def get_example_from_tensor_dict(self, tensor_dict):
+		"""See base class."""
+		return InputExample(
+			tensor_dict["idx"].numpy(),
+			tensor_dict["sentence1"].numpy().decode("utf-8"),
+			tensor_dict["sentence2"].numpy().decode("utf-8"),
+			str(tensor_dict["label"].numpy()),
+		)
+
+	def get_train_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "train_set.json")), "train")
+
+	def get_dev_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "val_set.json")), "dev")
+
+	def get_labels(self):
+		"""See base class."""
+
+		with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
+			labels = eval(f.read())
+		return labels
+
+	def _create_examples(self, lines, set_type):
+		"""Creates examples for the training and dev sets."""
+		examples = []
+		with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
+			labels = eval(f.read())
+		label_dict = dict(zip(labels, [*range(len(labels))]))
+
+
+
+		if type(lines)==type([]):
+			lines = lines[0]
+
+		type_num = len(label_dict)
+
+		for (i, line) in enumerate(lines):
+			guid = "%s-%s" % (set_type, str(i))
+			# print(line)
+			text_a = line["title"]
+			text_b = line["abstract"]
+			label = [0] * type_num
+			for j in line["levels"]:
+				label[label_dict[j]] = 1
+			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+		return examples
+
 glue_tasks_num_labels = {
 	"cola": 2,
 	"mnli": 3,
@@ -653,6 +707,7 @@ glue_tasks_num_labels = {
 	"wnli": 2,
 	"desccls":2,
 	"nlpcct5": 21,
+	'Nlpcct5alllabelProcessor':1530,
 }
 
 glue_processors = {
@@ -668,6 +723,7 @@ glue_processors = {
 	"wnli": WnliProcessor,
 	"desccls": DescCLSProcessor,
 	"nlpcct5": Nlpcct5Processor,
+	'allnlpcct5':Nlpcct5alllabelProcessor,
 }
 
 glue_output_modes = {
@@ -682,5 +738,7 @@ glue_output_modes = {
 	"rte": "classification",
 	"wnli": "classification",
 	"desccls": "classification",
-	"nlpcct5": "multilabel_classification"
+	"nlpcct5": "multilabel_classification",
+	'allnlpcct5':'multilabel_classification',
+
 }
