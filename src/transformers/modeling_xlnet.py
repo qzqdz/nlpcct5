@@ -1149,6 +1149,7 @@ class XLNetForSequenceClassification(XLNetPreTrainedModel):
             head_mask=head_mask,
             inputs_embeds=inputs_embeds,
         )
+        # 动刀处
         output = transformer_outputs[0]
 
         output = self.sequence_summary(output)
@@ -1162,8 +1163,9 @@ class XLNetForSequenceClassification(XLNetPreTrainedModel):
                 loss_fct = MSELoss()
                 loss = loss_fct(logits.view(-1), labels.view(-1))
             else:
-                loss_fct = CrossEntropyLoss()
-                loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+                # loss_fct = CrossEntropyLoss()
+                # loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+                loss = torch.nn.BCEWithLogitsLoss()(logits, labels)
             outputs = (loss,) + outputs
 
         return outputs  # return (loss), logits, (mems), (hidden states), (attentions)
@@ -1253,7 +1255,7 @@ class XLNetForTokenClassification(XLNetPreTrainedModel):
             head_mask=head_mask,
             inputs_embeds=inputs_embeds,
         )
-        # 动刀处
+
         sequence_output = outputs[0]
 
         logits = self.classifier(sequence_output)
