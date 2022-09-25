@@ -24,8 +24,8 @@
 <p>把1530个列标签写入了txt中，在metric和processors中使用的是绝对路径！！！</p>
 <p>8.train_code.py </p>
 <p>记录训练命令的地方</p>
-<p>8.train_code.py </p>
-<p>记录训练命令的地方</p>
+<p>9.eval_res </p>
+<p>存预测结果标签的地方</p>
 
 训练命令：
 CUDA_VISIBLE_DEVICES=7 python ./examples/run_glue.py     
