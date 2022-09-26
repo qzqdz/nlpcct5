@@ -556,8 +556,16 @@ class DescCLSProcessor(DataProcessor):
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
 		return examples
 
+def read_label(level_id):
+	path = f'./label_dir/level{level_id}_label.txt'
+	if not os.path.exists(path):
+		path = f'./src/transformers/data/processors/label_dir/level{level_id}_label.txt'
+	with open(path,'r',encoding='utf-8') as f:
+		label_lst = eval(f.read())
+	return label_lst
 
-class Nlpcct5Processor(DataProcessor):
+
+class Nlpcct5Level1Processor(DataProcessor):
 
 	"""Processor for the WNLI data set (GLUE version)."""
 
@@ -580,70 +588,39 @@ class Nlpcct5Processor(DataProcessor):
 
 	def get_labels(self):
 		"""See base class."""
-		return ['Energy',\
- 		'Physical chemistry',\
- 		'Inorganic chemistry',\
- 		'Materials science',\
- 		'Polymer science',\
- 		'Cross-disciplinary concepts', \
-		'Biology and biological chemistry',\
- 		'Organic chemistry',\
- 		'Analytical chemistry',\
- 		'Catalysis',\
- 		'Medicinal chemistry',\
- 		'Chemical biology',\
-		'Chemical engineering and industrial chemistry',\
- 		'Theoretical and computational chemistry',\
- 		'Organometallic chemistry',\
- 		'Supramolecular chemistry',\
- 		'Earth, space, and environmental chemistry',\
- 		'Nanoscience',\
- 		'Chemistry education',\
- 		'Agriculture and food chemistry',\
- 		'Nuclear chemistry']
+
+		path = './label_dir/level1_label.txt'
+		if not os.path.exists(path):
+			path = './src/transformers/data/processors/label_dir/level1_label.txt'
+		with open(path,'r',encoding='utf-8') as f:
+			labels = eval(f.read())
+		return labels
 
 	def _create_examples(self, lines, set_type):
 		"""Creates examples for the training and dev sets."""
 		examples = []
-		label_dict = {'Energy': 0, \
- 		'Physical chemistry': 1,\
- 		'Inorganic chemistry': 2,\
- 		'Materials science': 3,\
- 		'Polymer science': 4,\
- 		'Cross-disciplinary concepts': 5, \
-		'Biology and biological chemistry': 6,\
- 		'Organic chemistry': 7,\
- 		'Analytical chemistry': 8,\
- 		'Catalysis': 9,\
- 		'Medicinal chemistry': 10,\
- 		'Chemical biology': 11,\
-		'Chemical engineering and industrial chemistry': 12,\
- 		'Theoretical and computational chemistry': 13,\
- 		'Organometallic chemistry': 14,\
- 		'Supramolecular chemistry': 15,\
- 		'Earth, space, and environmental chemistry': 16,\
- 		'Nanoscience': 17,\
- 		'Chemistry education': 18,\
- 		'Agriculture and food chemistry': 19,\
- 		'Nuclear chemistry': 20}
+
+		path = './label_dir/level1_label.txt'
+		if not os.path.exists(path):
+			path = './src/transformers/data/processors/label_dir/level1_label.txt'
+		with open(path,'r',encoding='utf-8') as f:
+			labels = eval(f.read())
+
+		label_dict = dict(zip(labels, [*range(len(labels))]))
 
 		if type(lines)==type([]):
 			lines = lines[0]
 
 		for (i, line) in enumerate(lines):
 			guid = "%s-%s" % (set_type, str(i))
-			# print('=================================')
-			# print(line)
 			text_a = line["title"]
 			text_b = line["abstract"]
 			label = [0] * 21
 			for j in line["level1"]:
-				# print('--------------------------')
-				# print(j)
-				# print('--------------------------')
+
 				label[label_dict[j]] = 1
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
-			# print('=================================')
+
 		return examples
 
 
@@ -671,34 +648,41 @@ class Nlpcct5alllabelProcessor(DataProcessor):
 	def get_labels(self):
 		"""See base class."""
 
-		with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
-			labels = eval(f.read())
-		return labels
+		level1_label = read_label(1)
+		level2_label = read_label(2)
+		level3_label = read_label(3)
+
+		return level1_label+level2_label+level3_label
 
 	def _create_examples(self, lines, set_type):
 		"""Creates examples for the training and dev sets."""
 		examples = []
-		with open(r'D:\study\nlpcct5\src\transformers\data\processors\nlpcct5_all_label.txt','r',encoding='utf-8') as f:
-			labels = eval(f.read())
-		label_dict = dict(zip(labels, [*range(len(labels))]))
 
-
+		level1_label = read_label(1)
+		level2_label = read_label(2)
+		level3_label = read_label(3)
+		def make_label(label_lst:list,level_label:list):
+			onehotlabel = [0]*len(level_label)
+			for label in label_lst:
+				onehotlabel[level_label.index(label)]=1
+			return onehotlabel
 
 		if type(lines)==type([]):
 			lines = lines[0]
-
-		type_num = len(label_dict)
 
 		for (i, line) in enumerate(lines):
 			guid = "%s-%s" % (set_type, str(i))
 			# print(line)
 			text_a = line["title"]
 			text_b = line["abstract"]
-			label = [0] * type_num
-			for j in line["levels"]:
-				label[label_dict[j]] = 1
+			line_level1_label = make_label(line['level1'],level1_label)
+			line_level2_label = make_label(line['level2'], level2_label)
+			line_level3_label = make_label(line['level3'], level3_label)
+			label = line_level1_label+line_level2_label+line_level3_label
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
 		return examples
+
+
 
 glue_tasks_num_labels = {
 	"cola": 2,
@@ -711,8 +695,8 @@ glue_tasks_num_labels = {
 	"rte": 2,
 	"wnli": 2,
 	"desccls":2,
-	"nlpcct5": 21,
-	'Nlpcct5alllabelProcessor':1530,
+	"nlpcct5level1": 21,
+	'Nlpcct5alllabelProcessor':1553,
 }
 
 glue_processors = {
@@ -727,7 +711,7 @@ glue_processors = {
 	"rte": RteProcessor,
 	"wnli": WnliProcessor,
 	"desccls": DescCLSProcessor,
-	"nlpcct5": Nlpcct5Processor,
+	"nlpcct5level1": Nlpcct5Level1Processor,
 	'allnlpcct5':Nlpcct5alllabelProcessor,
 }
 
@@ -743,7 +727,7 @@ glue_output_modes = {
 	"rte": "classification",
 	"wnli": "classification",
 	"desccls": "classification",
-	"nlpcct5": "multilabel_classification",
+	"nlpcct5level1": "multilabel_classification",
 	'allnlpcct5':'multilabel_classification',
 
 }
