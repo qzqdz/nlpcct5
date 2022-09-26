@@ -27,6 +27,15 @@
 <p>9.eval_res </p>
 <p>存预测结果标签的地方</p>
 
+<p><h4>2022/9/26</h4></p>
+<p>10.src\transformers\data\processors\label_dir </p>
+<p>添加label文件夹，里面放规定好顺序的label1~label3</p>
+<p>10.src\transformers\data\processors\glue.py </p>
+<p>添加make_label函数，该函数根据label（1,2,3）文件中的标签顺序对某条训练数据的标签进行one-hot处理，并返回01list</p>
+<p>11.src\transformers\data\processors\glue.py </p>
+<p>添加read_label函数，读入label（1,2,3）中的标签list</p>
+
+
 训练命令：
 CUDA_VISIBLE_DEVICES=7 python ./examples/run_glue.py     
 --model_type bert     
