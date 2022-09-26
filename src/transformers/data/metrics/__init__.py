@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 
 try:
 	from scipy.stats import pearsonr, spearmanr
@@ -83,9 +84,13 @@ if _has_sklearn:
 			sigmoid_preds = np.greater(sigmoid_preds,0.5).astype(np.float32)
 			micro_f1 = f1_score(labels,sigmoid_preds,average='micro')
 			macro_f1 = f1_score(labels,sigmoid_preds,average='macro')
-			with open(r'D:\study\model\nlpcc_base_bert\labels.txt','w',encoding='utf-8') as f:
+
+			if not os.path.exists('./eval_res/'):
+				os.mkdir('./eval_res/')
+
+			with open(r'./eval_res/labels.txt','w',encoding='utf-8') as f:
 				f.write(str(labels.tolist()))
-			with open(r'D:\study\model\nlpcc_base_bert\pred.txt','w',encoding='utf-8') as f:
+			with open(r'./eval_res/pred.txt','w',encoding='utf-8') as f:
 				f.write(str(sigmoid_preds.tolist()))
 
 			return {
