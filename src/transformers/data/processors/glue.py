@@ -632,13 +632,18 @@ class Nlpcct5Processor(DataProcessor):
 
 		for (i, line) in enumerate(lines):
 			guid = "%s-%s" % (set_type, str(i))
+			# print('=================================')
 			# print(line)
 			text_a = line["title"]
 			text_b = line["abstract"]
 			label = [0] * 21
 			for j in line["level1"]:
+				# print('--------------------------')
+				# print(j)
+				# print('--------------------------')
 				label[label_dict[j]] = 1
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+			# print('=================================')
 		return examples
 
 
