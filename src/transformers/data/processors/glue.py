@@ -565,6 +565,90 @@ def read_label(level_id):
 	return label_lst
 
 
+class Nlpcct5Processor(DataProcessor):
+
+	"""Processor for the WNLI data set (GLUE version)."""
+
+	def get_example_from_tensor_dict(self, tensor_dict):
+		"""See base class."""
+		return InputExample(
+			tensor_dict["idx"].numpy(),
+			tensor_dict["sentence1"].numpy().decode("utf-8"),
+			tensor_dict["sentence2"].numpy().decode("utf-8"),
+			str(tensor_dict["label"].numpy()),
+		)
+
+	def get_train_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "train_set.json")), "train")
+
+	def get_dev_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "val_set.json")), "dev")
+
+	def get_labels(self):
+		"""See base class."""
+		return ['Energy',\
+ 		'Physical chemistry',\
+ 		'Inorganic chemistry',\
+ 		'Materials science',\
+ 		'Polymer science',\
+ 		'Cross-disciplinary concepts', \
+		'Biology and biological chemistry',\
+ 		'Organic chemistry',\
+ 		'Analytical chemistry',\
+ 		'Catalysis',\
+ 		'Medicinal chemistry',\
+ 		'Chemical biology',\
+		'Chemical engineering and industrial chemistry',\
+ 		'Theoretical and computational chemistry',\
+ 		'Organometallic chemistry',\
+ 		'Supramolecular chemistry',\
+ 		'Earth, space, and environmental chemistry',\
+ 		'Nanoscience',\
+ 		'Chemistry education',\
+ 		'Agriculture and food chemistry',\
+ 		'Nuclear chemistry']
+
+	def _create_examples(self, lines, set_type):
+		"""Creates examples for the training and dev sets."""
+		examples = []
+		label_dict = {'Energy': 0, \
+ 		'Physical chemistry': 1,\
+ 		'Inorganic chemistry': 2,\
+ 		'Materials science': 3,\
+ 		'Polymer science': 4,\
+ 		'Cross-disciplinary concepts': 5, \
+		'Biology and biological chemistry': 6,\
+ 		'Organic chemistry': 7,\
+ 		'Analytical chemistry': 8,\
+ 		'Catalysis': 9,\
+ 		'Medicinal chemistry': 10,\
+ 		'Chemical biology': 11,\
+		'Chemical engineering and industrial chemistry': 12,\
+ 		'Theoretical and computational chemistry': 13,\
+ 		'Organometallic chemistry': 14,\
+ 		'Supramolecular chemistry': 15,\
+ 		'Earth, space, and environmental chemistry': 16,\
+ 		'Nanoscience': 17,\
+ 		'Chemistry education': 18,\
+ 		'Agriculture and food chemistry': 19,\
+ 		'Nuclear chemistry': 20}
+
+		if type(lines) == type([]):
+			lines = lines[0]
+
+		for (i, line) in enumerate(lines):
+			guid = "%s-%s" % (set_type, str(i))
+			text_a = line["title"]
+			text_b = line["abstract"]
+			label = [0] * 21
+			for i in line["level1"]:
+				label[label_dict[i]] = 1
+			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+		return examples
+
+
 class Nlpcct5Level1Processor(DataProcessor):
 
 	"""Processor for the WNLI data set (GLUE version)."""
@@ -589,24 +673,14 @@ class Nlpcct5Level1Processor(DataProcessor):
 	def get_labels(self):
 		"""See base class."""
 
-		path = './label_dir/level1_label.txt'
-		if not os.path.exists(path):
-			path = './src/transformers/data/processors/label_dir/level1_label.txt'
-		with open(path,'r',encoding='utf-8') as f:
-			labels = eval(f.read())
-		return labels
+		return read_label(1)
 
 	def _create_examples(self, lines, set_type):
 		"""Creates examples for the training and dev sets."""
 		examples = []
 
-		path = './label_dir/level1_label.txt'
-		if not os.path.exists(path):
-			path = './src/transformers/data/processors/label_dir/level1_label.txt'
-		with open(path,'r',encoding='utf-8') as f:
-			labels = eval(f.read())
+		labels = read_label(1)
 
-		label_dict = dict(zip(labels, [*range(len(labels))]))
 
 		if type(lines)==type([]):
 			lines = lines[0]
@@ -615,10 +689,9 @@ class Nlpcct5Level1Processor(DataProcessor):
 			guid = "%s-%s" % (set_type, str(i))
 			text_a = line["title"]
 			text_b = line["abstract"]
-			label = [0] * 21
+			label = [0] * len(labels)
 			for j in line["level1"]:
-
-				label[label_dict[j]] = 1
+				label[labels.index(j)] = 1
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
 
 		return examples
@@ -696,7 +769,7 @@ glue_tasks_num_labels = {
 	"wnli": 2,
 	"desccls":2,
 	"nlpcct5level1": 21,
-	'Nlpcct5alllabelProcessor':1553,
+	'allnlpcct5':1553,
 }
 
 glue_processors = {
@@ -712,7 +785,7 @@ glue_processors = {
 	"wnli": WnliProcessor,
 	"desccls": DescCLSProcessor,
 	"nlpcct5level1": Nlpcct5Level1Processor,
-	'allnlpcct5':Nlpcct5alllabelProcessor,
+	# 'allnlpcct5':Nlpcct5alllabelProcessor,
 }
 
 glue_output_modes = {
@@ -728,6 +801,5 @@ glue_output_modes = {
 	"wnli": "classification",
 	"desccls": "classification",
 	"nlpcct5level1": "multilabel_classification",
-	'allnlpcct5':'multilabel_classification',
-
+	# 'allnlpcct5':'multilabel_classification',
 }
