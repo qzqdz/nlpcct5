@@ -35,6 +35,8 @@
 <p>11.src\transformers\data\processors\glue.py </p>
 <p>添加read_label函数，读入label（1,2,3）中的标签list</p>
 
+<p><h4>2022/9/27</h4></p>
+<p>重新处理了代码，训练和测试的结果能对上了</p>
 
 训练命令：
 CUDA_VISIBLE_DEVICES=7 python ./examples/run_glue.py     

@@ -38,14 +38,11 @@ from transformers import (
     AutoTokenizer,
     get_linear_schedule_with_warmup,
 )
-
+from transformers import glue_compute_metrics as compute_metrics
 from transformers import glue_convert_examples_to_features as convert_examples_to_features
 from transformers import glue_output_modes as output_modes
-
-# from ..src.transformers.data.processors import glue_processors as processors
-# from ..src.transformers.data.metrics import glue_compute_metrics as compute_metrics
 from transformers import glue_processors as processors
-from transformers import glue_compute_metrics as compute_metrics
+
 
 try:
     from torch.utils.tensorboard import SummaryWriter
@@ -313,7 +310,7 @@ def evaluate(args, model, tokenizer, prefix=""):
         eval_loss = eval_loss / nb_eval_steps
         if args.output_mode == "classification":
             preds = np.argmax(preds, axis=1)
-        elif args.output_mode == "regression":
+        elif args.output_mode == "regression" or args.output_mode == "multilabel_classification":
             preds = np.squeeze(preds)
         result = compute_metrics(eval_task, preds, out_label_ids)
         results.update(result)
@@ -379,7 +376,7 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
     all_token_type_ids = torch.tensor([f.token_type_ids for f in features], dtype=torch.long)
     if output_mode == "classification":
         all_labels = torch.tensor([f.label for f in features], dtype=torch.long)
-    elif output_mode == "regression"  or output_mode == "multilabel_classification":
+    elif output_mode == "regression" or output_mode == 'multilabel_classification':
         all_labels = torch.tensor([f.label for f in features], dtype=torch.float)
 
     dataset = TensorDataset(all_input_ids, all_attention_mask, all_token_type_ids, all_labels)
