@@ -696,6 +696,53 @@ class Nlpcct5Level1Processor(DataProcessor):
 
 		return examples
 
+class Nlpcct5Level2Processor(DataProcessor):
+
+	"""Processor for the WNLI data set (GLUE version)."""
+
+	def get_example_from_tensor_dict(self, tensor_dict):
+		"""See base class."""
+		return InputExample(
+			tensor_dict["idx"].numpy(),
+			tensor_dict["sentence1"].numpy().decode("utf-8"),
+			tensor_dict["sentence2"].numpy().decode("utf-8"),
+			str(tensor_dict["label"].numpy()),
+		)
+
+	def get_train_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "train_set.json")), "train")
+
+	def get_dev_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "val_set.json")), "dev")
+
+	def get_labels(self):
+		"""See base class."""
+
+		return read_label(2)
+
+	def _create_examples(self, lines, set_type):
+		"""Creates examples for the training and dev sets."""
+		examples = []
+
+		labels = read_label(2)
+
+
+		if type(lines)==type([]):
+			lines = lines[0]
+
+		for (i, line) in enumerate(lines):
+			guid = "%s-%s" % (set_type, str(i))
+			text_a = line["title"]
+			text_b = line["abstract"]
+			label = [0] * len(labels)
+			for j in line["level2"]:
+				label[labels.index(j)] = 1
+			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+
+		return examples
+
 
 class Nlpcct5alllabelProcessor(DataProcessor):
 
@@ -769,6 +816,7 @@ glue_tasks_num_labels = {
 	"wnli": 2,
 	"desccls":2,
 	"nlpcct5level1": 21,
+	"nlpcct5level2": 260,
 	'allnlpcct5':1553,
 }
 
@@ -785,6 +833,7 @@ glue_processors = {
 	"wnli": WnliProcessor,
 	"desccls": DescCLSProcessor,
 	"nlpcct5level1": Nlpcct5Level1Processor,
+	'nlpcct5level2': Nlpcct5Level2Processor,
 	# 'allnlpcct5':Nlpcct5alllabelProcessor,
 }
 
@@ -801,5 +850,6 @@ glue_output_modes = {
 	"wnli": "classification",
 	"desccls": "classification",
 	"nlpcct5level1": "multilabel_classification",
+	"nlpcct5level2": "multilabel_classification",
 	# 'allnlpcct5':'multilabel_classification',
 }
