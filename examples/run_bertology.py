@@ -64,7 +64,7 @@ def compute_heads_importance(
         - head importance scores according to http://arxiv.org/abs/1905.10650
     """
     # Prepare our tensors
-    n_layers, n_heads = model.bert.config.num_hidden_layers, model.bert.config.num_attention_heads
+    n_layers, n_heads = model.bert_a.config.num_hidden_layers, model.bert_a.config.num_attention_heads
     head_importance = torch.zeros(n_layers, n_heads).to(args.device)
     attn_entropy = torch.zeros(n_layers, n_heads).to(args.device)
 

@@ -883,9 +883,9 @@ glue_processors = {
 	"desccls": DescCLSProcessor,
 	"nlpcct5level1": Nlpcct5Level1Processor,
 	'nlpcct5level2': Nlpcct5Level2Processor,
+	'allnlpcct5':Nlpcct5alllabelProcessor,
 	'nlpcct5level3': Nlpcct5Level3Processor,
 
-	# 'allnlpcct5':Nlpcct5alllabelProcessor,
 }
 
 glue_output_modes = {
@@ -901,6 +901,8 @@ glue_output_modes = {
 	"wnli": "classification",
 	"desccls": "classification",
 	"nlpcct5level1": "multilabel_classification",
+	"nlpcct5level2": "multilabel_classification",
+	'allnlpcct5':'multilabel_classification',
 	"nlpcct5level3": "multilabel_classification",
-	# 'allnlpcct5':'multilabel_classification',
+
 }
