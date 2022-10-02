@@ -38,6 +38,15 @@
 <p><h4>2022/9/27</h4></p>
 <p>重新处理了代码，训练和测试的结果能对上了</p>
 
+
+<p><h4>2022/10/2</h4></p>
+<p>12.src\transformers\modeling_bert.py</p>
+<p>在BertForSequenceClassification中添加compute_kl_loss方法，计算结果的kl散度</p>
+<p>后面的output全部复制粘贴一份</p>
+<p>loss的计算方法为两loss求和/2+5*kl</p>
+
+
+
 训练命令：
 CUDA_VISIBLE_DEVICES=7 python ./examples/run_glue.py     
 --model_type bert     

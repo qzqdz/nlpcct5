@@ -28,14 +28,21 @@ acc = 0.9255142857142857
 macro_f1 = 0.7178801980374249
 micro_f1 = 0.7692852296527921
 
+bert 4 256 1e-5 10.2 1：24
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/bertbase_lr10_bs4_256_lv1     --task_name nlpcct5level1    --do_train     --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 256     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir E:/model/bertbase_lr10_bs4_256_lv1/output_dir/
+
+
 roberta test
 python ./examples/run_glue.py     --model_type roberta     --model_name_or_path  E:/model/nlpcc_base_roberta/output_dir/checkpoint-33500     --task_name nlpcct5level1     --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir  E:/model/nlpcc_base_roberta/output_dir/checkpoint-33500/
+
 acc = 0.9248761904761905
 macro_f1 = 0.7187208026792506
 micro_f1 = 0.7659347181008901
 
 xlnet train
 python ./examples/run_glue.py     --model_type xlnet     --model_name_or_path  E:/model/nlpcc_base_xlnet/output_dir/checkpoint-54000     --task_name nlpcct5level1    --do_train    --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir  E:/model/nlpcc_base_xlnet/output_dir/54000_more
+xlnetbase_lr5_bs2_512_lv1
+python ./examples/run_glue.py     --model_type xlnet     --model_name_or_path  E:/model/xlnetbase_lr5_bs2_512_lv1     --task_name nlpcct5level1    --do_train    --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 1024     --per_gpu_eval_batch_size=2       --per_gpu_train_batch_size=2       --learning_rate 5e-6     --num_train_epochs 3.0     --output_dir  E:/model/xlnetbase_lr5_bs2_512_lv1/output_dir/
 
 
 xlnet test
@@ -63,11 +70,40 @@ cl
 bert train
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/nlpcc_cl_bert     --task_name nlpcct5level1    --do_train     --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=2       --per_gpu_train_batch_size=2       --learning_rate 5e-6     --num_train_epochs 3.0     --output_dir E:/model/nlpcc_cl_bert/output_dir/
 
+res test
+robertabase_lr10_bs3_512_lv3
+python ./examples/run_glue.py     --model_type roberta     --model_name_or_path F:/model/robertabase_lr10_bs3_512_lvs/output_dir/checkpoint-58500     --task_name allnlpcct5   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir F:/model/robertabase_lr10_bs3_512_lvs/output_dir/checkpoint-58500/
+
+!!训练错误，舍弃
+robertabase_lr20_bs8_512_lvs
+python ./examples/run_glue.py     --model_type roberta     --model_name_or_path E:/model/robertabase_lr20_bs8_512_lvs/output_dir/checkpoint-33500     --task_name allnlpcct5   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir E:/model/robertabase_lr20_bs8_512_lvs/output_dir/checkpoint-33500/
+
+bertbase_lr20_bs8_512_lv1 ??
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/bertbase_lr20_bs8_512_lv1/epcoh3_21_title     --task_name nlpcct5level1   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir E:/model/bertbase_lr20_bs8_512_lv1/epcoh3_21_title/
+
+bertbase_lr10_bs3_512_lv1_1 15:43
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path F:/model/bertbase_lr10_bs3_512_lv1_1/output_dir/checkpoint-90000     --task_name nlpcct5level1   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir F:/model/bertbase_lr10_bs3_512_lv1_1/output_dir/checkpoint-90000/
+
+xlnetbase_lr20_bs2_512_lv1 15:57
+python ./examples/run_glue.py     --model_type xlnet     --model_name_or_path F:/model/xlnetbase_lr20_bs2_512_lv1/output_dir/checkpoint-67500     --task_name nlpcct5level1   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=2       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir F:/model/xlnetbase_lr20_bs2_512_lv1/output_dir/checkpoint-67500/
+
+bertbase_lr20_bs8_512_lv2
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path F:/model/bertbase_lr20_bs8_512_lv2/output_dir     --task_name nlpcct5level2   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir F:/model/bertbase_lr20_bs8_512_lv2/output_dir/
+
+bertbase_lr10_bs4_512_lv2
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path F:/model/bertbase_lr10_bs4_512_lv2/output_dir/checkpoint-67500     --task_name nlpcct5level2   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir F:/model/bertbase_lr10_bs4_512_lv2/output_dir/checkpoint-67500/
+
+bertbase_lr10_bs3_512_lv2
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path F:/model/bertbase_lr10_bs3_512_lv2/output_dir/checkpoint-90000     --task_name nlpcct5level2   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir F:/model/bertbase_lr10_bs3_512_lv2/output_dir/checkpoint-90000/
+
+F:\model\bertbase_lr20_bs8_512_lvs\output_dir\checkpoint-33500
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path F:/model/bertbase_lr20_bs8_512_lvs/output_dir/checkpoint-33500     --task_name allnlpcct5   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir F:/model/bertbase_lr20_bs8_512_lvs/output_dir/checkpoint-33500/
 
 
 
 3.level2标签
 bert train
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/nlpcc_base_bert_level2    --task_name nlpcct5level2    --do_train     --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir E:/model/nlpcc_base_bert_level2/output_dir/
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/nlpcc_base_bert_level2    --task_name nlpcct5level2    --do_train     --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir E:/model/nlpcc_base_bert_level2/output_dir/
 bert test
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/nlpcc_base_bert_level2/output_dir/checkpoint-33500    --task_name nlpcct5level2   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir E:/model/nlpcc_base_bert_level2/output_dir/
@@ -76,11 +112,14 @@ macro_f1 = 0.12541599284502558
 micro_f1 = 0.528444418618165
 
 bert train epoch = 4
+
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/nlpcc_base_bert_level2_4    --task_name nlpcct5level2    --do_train     --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir E:/model/nlpcc_base_bert_level2_4/output_dir/
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/nlpcc_base_bert_level2_4    --task_name nlpcct5level2   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir E:/model/nlpcc_base_bert_level2_4/output_dir/
 acc = 0.98699
 macro_f1 = 0.1030889123657036
 micro_f1 = 0.4905569444862796
+
+
 
 
 '''
@@ -107,6 +146,7 @@ python ./examples/run_glue.py     --model_type xlnet     --model_name_or_path D:
 
 lavel1_label xlnet test
 python ./examples/run_glue.py     --model_type xlnet     --model_name_or_path D:/model/nlpcc_base_xlnet/output_dir/checkpoint-54000     --task_name nlpcct5level1     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=2       --per_gpu_train_batch_size=2       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_base_xlnet/output_dir/checkpoint-54000/
+
 
 lavel1_label bert 
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/nlpcc_bert_base     --task_name nlpcct5level1    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcct5_base_bert/output_dir/
