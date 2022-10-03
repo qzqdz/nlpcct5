@@ -1017,7 +1017,7 @@ class BertForMaskedLM(BertPreTrainedModel):
 @add_start_docstrings(
 	"""Bert Model with a `next sentence prediction (classification)` head on top. """, BERT_START_DOCSTRING,
 )
-class BertForNextSentencePrediction(BertPreTrainedModel):
+class BertForNextSentencePrediction1(BertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
 
@@ -1107,7 +1107,7 @@ class BertForNextSentencePrediction(BertPreTrainedModel):
 
 # 更改处
 # 双编码器文本分类对比学习
-class BertForSequenceClassification(BertPreTrainedModel):
+class BertForSequenceClassification1(BertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
 		self.num_labels = config.num_labels
@@ -1239,14 +1239,13 @@ class BertForSequenceClassification(BertPreTrainedModel):
 
 
 # 单编码器文本分类对比学习
-class BertForSequenceClassification1(BertPreTrainedModel):
+class BertForSequenceClassification(BertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
 		self.num_labels = config.num_labels
 		self.bert = BertModel(config)
 		self.dropout = nn.Dropout(config.hidden_dropout_prob)
 		self.classifier = nn.Linear(config.hidden_size, self.config.num_labels)
-
 		self.init_weights()
 
 	def compute_kl_loss(self, output_a, output_b, loss_name='mean'):
@@ -1319,12 +1318,12 @@ class BertForSequenceClassification1(BertPreTrainedModel):
 			outputs_a = (loss_a,) + outputs_a
 			outputs_b = (loss_b,) + outputs_b
 
-			kl = (self.compute_kl_loss(logits_a, logits_b) * 5,)
+			kl = ((self.compute_kl_loss(logits_a, logits_b)+self.compute_kl_loss(logits_b, logits_a))/2 * 5,)
 
 			# print('--------------------------------------------')
 			# compute_kl_loss 一个数值
 
-		return outputs_a + outputs_b+ kl # (loss), logits, (hidden_states), (attentions)
+		return (outputs_a + outputs_b)/2+ kl # (loss), logits, (hidden_states), (attentions)
 
 @add_start_docstrings(
 	"""Bert Model with a multiple choice classification head on top (a linear layer on top of
