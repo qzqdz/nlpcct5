@@ -155,16 +155,41 @@ lavel1_label bert
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/nlpcc_bert_base/output_dir/checkpoint-33000     --task_name nlpcct5level1    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_bert_base/output_dir/33000-more/
 
 level1_label bert test
-python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/nlpcc_bert_base/output_dir/checkpoint-33000     --task_name nlpcct5level1     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_bert_base/output_dir/checkpoint-33000/
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/nlpcc_bert_base_level1_3/output_dir/checkpoint-90000     --task_name nlpcct5level1     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_bert_base_level1_3/output_dir/checkpoint-90000/
+
+
+level1_label_256 256size train
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/bertbase_lr10_bs3_256_lv1     --task_name nlpcct5level1     --do_train    --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 256     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/bertbase_lr10_bs3_256_lv1/output_dir/
+
+
+bertcl_lr5_bs2_256_lv1
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/bertcl_lr5_bs2_256_lv1     --task_name nlpcct5level1    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 256     --per_gpu_eval_batch_size=2       --per_gpu_train_batch_size=2       --learning_rate 5e-6     --num_train_epochs 3.0     --output_dir D:/model/bertcl_lr5_bs2_256_lv1/output_dir/
+continue train 
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/bertcl_lr5_bs2_256_lv1/output_dir/checkpoint-123500     --task_name nlpcct5level1     --do_train    --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 256     --per_gpu_eval_batch_size=2       --per_gpu_train_batch_size=2       --learning_rate 5e-6     --num_train_epochs 3.0     --output_dir D:/model/bertcl_lr5_bs2_256_lv1/output_dir/123500more/
+
+test
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/bertcl_lr5_bs2_256_lv1/output_dir/checkpoint-123500     --task_name nlpcct5level1    --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 256     --per_gpu_eval_batch_size=2       --per_gpu_train_batch_size=2       --learning_rate 5e-6     --num_train_epochs 3.0     --output_dir D:/model/bertcl_lr5_bs2_256_lv1/output_dir/checkpoint-123500/
+
+
+
+level2_label bert bese
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/nlpcc_bert_base_level2_3    --task_name nlpcct5level2    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_bert_base_level2_3/output_dir/
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/nlpcc_bert_base_level2_3/output_dir/checkpoint-56500    --task_name nlpcct5level2    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_bert_base_level2_3/output_dir/more_56500/
 
 
 level3标签
 bert train
-python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/nlpcc_base_bert_level2    --task_name nlpcct5level2    --do_train     --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir E:/model/nlpcc_base_bert_level2/output_dir/
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/nlpcc_bert_base_level3_3    --task_name nlpcct5level3    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_bert_base_level3_3/output_dir/
+
+bert 
+
+bertbase_lr10_bs3_512_lv3 
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path F:/model/bertbase_lr10_bs3_512_lv3/output_dir/checkpoint-90000    --task_name nlpcct5level3    --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir F:/model/bertbase_lr10_bs3_512_lv3/output_dir/checkpoint-90000/
+
+
+
 
 
 '''
 
 import os
-cm2_level2_xlnet = '''python ./examples/run_glue.py     --model_type xlnet     --model_name_or_path D:/model/nlpcc_bert_base_level3_4     --task_name nlpcct5level3    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/nlpcc_bert_base_level3_4/output_dir/'''
-os.system(cm2_level2_xlnet)

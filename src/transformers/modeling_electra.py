@@ -8,7 +8,7 @@ from transformers import ElectraConfig, add_start_docstrings
 from transformers.activations import get_activation
 
 from .file_utils import add_start_docstrings_to_callable
-from .modeling_bert import BertEmbeddings, BertEncoder, BertLayerNorm, BertPreTrainedModel
+from .modeling_bert_backup import BertEmbeddings, BertEncoder, BertLayerNorm, BertPreTrainedModel
 
 
 logger = logging.getLogger(__name__)

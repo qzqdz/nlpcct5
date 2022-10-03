@@ -52,7 +52,7 @@ from .modeling_bart import (
     BartForSequenceClassification,
     BartModel,
 )
-from .modeling_bert import (
+from .modeling_bert_backup import (
     BERT_PRETRAINED_MODEL_ARCHIVE_MAP,
     BertForMaskedLM,
     BertForPreTraining,

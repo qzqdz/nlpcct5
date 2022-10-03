@@ -1104,16 +1104,26 @@ class BertForNextSentencePrediction(BertPreTrainedModel):
 	the pooled output) e.g. for GLUE tasks. """,
 	BERT_START_DOCSTRING,
 )
+
+# 更改处
+# 双编码器文本分类对比学习
 class BertForSequenceClassification(BertPreTrainedModel):
 	def __init__(self, config):
 		super().__init__(config)
 		self.num_labels = config.num_labels
 
-		self.bert = BertModel(config)
+		self.bert_a = BertModel(config)
+		self.bert_b = BertModel(config)
 		self.dropout = nn.Dropout(config.hidden_dropout_prob)
 		self.classifier = nn.Linear(config.hidden_size, self.config.num_labels)
 
 		self.init_weights()
+
+	def compute_kl_loss(self, output_a, output_b, loss_name='mean'):
+		output_a = torch.softmax(output_a,dim=-1)
+		output_b = torch.softmax(output_b,dim=-1)
+		kl = torch.nn.functional.kl_div(output_a.log2(),output_b.log2(),reduction=loss_name)
+		return kl
 
 	@add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
 	def forward(
@@ -1167,7 +1177,15 @@ class BertForSequenceClassification(BertPreTrainedModel):
 
 		"""
 
-		outputs = self.bert(
+		outputs_a = self.bert_a(
+			input_ids,
+			attention_mask=attention_mask,
+			token_type_ids=token_type_ids,
+			position_ids=position_ids,
+			head_mask=head_mask,
+			inputs_embeds=inputs_embeds,
+		)
+		outputs_b = self.bert_b(
 			input_ids,
 			attention_mask=attention_mask,
 			token_type_ids=token_type_ids,
@@ -1176,26 +1194,137 @@ class BertForSequenceClassification(BertPreTrainedModel):
 			inputs_embeds=inputs_embeds,
 		)
 
-		pooled_output = outputs[1]
+		pooled_output_a = outputs_a[1]
 
-		pooled_output = self.dropout(pooled_output)
-		logits = self.classifier(pooled_output)
+		pooled_output_a = self.dropout(pooled_output_a)
+		logits_a = self.classifier(pooled_output_a)
 
-		outputs = (logits,) + outputs[2:]  # add hidden states and attention if they are here
+		pooled_output_b = outputs_b[1]
+
+		pooled_output_b = self.dropout(pooled_output_b)
+		logits_b = self.classifier(pooled_output_b)
+
+
+		outputs_a = (logits_a,) + outputs_a[2:]  # add hidden states and attention if they are here
+		outputs_b = (logits_b,) + outputs_b[2:]  # add hidden states and attention if they are here
+
 
 		if labels is not None:
 			if self.num_labels == 1:
 				#  We are doing regression
-				loss_fct = MSELoss()
-				loss = loss_fct(logits.view(-1), labels.view(-1))
+				loss_fct_a = MSELoss()
+				loss_a = loss_fct_a(logits_a.view(-1), labels.view(-1))
+				loss_fct_b = MSELoss()
+				loss_b = loss_fct_b(logits_b.view(-1), labels.view(-1))
 			else:
 				#loss_fct = CrossEntropyLoss()
 				#loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
-				loss = torch.nn.BCEWithLogitsLoss()(logits, labels)
-			outputs = (loss,) + outputs
+				loss_a = torch.nn.BCEWithLogitsLoss()(logits_a, labels)
+				loss_b = torch.nn.BCEWithLogitsLoss()(logits_b, labels)
 
-		return outputs  # (loss), logits, (hidden_states), (attentions)
+			# print('-------------------------------------------')
+			# loss
+			# tensor(0.6994, device='cuda:0',grad_fn=<BinaryCrossEntropyWithLogitsBackward0>)
+			# output
+			# batch_size * label_num
+			outputs_a = (loss_a,) + outputs_a
+			outputs_b = (loss_b,) + outputs_b
 
+			kl = (self.compute_kl_loss(logits_a, logits_b) * 5,)
+
+			# print('--------------------------------------------')
+			# compute_kl_loss 一个数值
+
+		return outputs_a + outputs_b+ kl # (loss), logits, (hidden_states), (attentions)
+
+
+# 单编码器文本分类对比学习
+class BertForSequenceClassification1(BertPreTrainedModel):
+	def __init__(self, config):
+		super().__init__(config)
+		self.num_labels = config.num_labels
+		self.bert = BertModel(config)
+		self.dropout = nn.Dropout(config.hidden_dropout_prob)
+		self.classifier = nn.Linear(config.hidden_size, self.config.num_labels)
+
+		self.init_weights()
+
+	def compute_kl_loss(self, output_a, output_b, loss_name='mean'):
+		output_a = torch.softmax(output_a,dim=-1)
+		output_b = torch.softmax(output_b,dim=-1)
+		kl = torch.nn.functional.kl_div(output_a.log2(),output_b.log2(),reduction=loss_name)
+		return kl
+
+	@add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+	def forward(
+		self,
+		input_ids=None,
+		attention_mask=None,
+		token_type_ids=None,
+		position_ids=None,
+		head_mask=None,
+		inputs_embeds=None,
+		labels=None,
+	):
+		outputs_a = self.bert(
+			input_ids,
+			attention_mask=attention_mask,
+			token_type_ids=token_type_ids,
+			position_ids=position_ids,
+			head_mask=head_mask,
+			inputs_embeds=inputs_embeds,
+		)
+		outputs_b = self.bert(
+			input_ids,
+			attention_mask=attention_mask,
+			token_type_ids=token_type_ids,
+			position_ids=position_ids,
+			head_mask=head_mask,
+			inputs_embeds=inputs_embeds,
+		)
+
+		pooled_output_a = outputs_a[1]
+
+		pooled_output_a = self.dropout(pooled_output_a)
+		logits_a = self.classifier(pooled_output_a)
+
+		pooled_output_b = outputs_b[1]
+
+		pooled_output_b = self.dropout(pooled_output_b)
+		logits_b = self.classifier(pooled_output_b)
+
+
+		outputs_a = (logits_a,) + outputs_a[2:]  # add hidden states and attention if they are here
+		outputs_b = (logits_b,) + outputs_b[2:]  # add hidden states and attention if they are here
+
+
+		if labels is not None:
+			if self.num_labels == 1:
+				#  We are doing regression
+				loss_fct_a = MSELoss()
+				loss_a = loss_fct_a(logits_a.view(-1), labels.view(-1))
+				loss_fct_b = MSELoss()
+				loss_b = loss_fct_b(logits_b.view(-1), labels.view(-1))
+			else:
+				#loss_fct = CrossEntropyLoss()
+				#loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+				loss_a = torch.nn.BCEWithLogitsLoss()(logits_a, labels)
+				loss_b = torch.nn.BCEWithLogitsLoss()(logits_b, labels)
+
+			# print('-------------------------------------------')
+			# loss
+			# tensor(0.6994, device='cuda:0',grad_fn=<BinaryCrossEntropyWithLogitsBackward0>)
+			# output
+			# batch_size * label_num
+			outputs_a = (loss_a,) + outputs_a
+			outputs_b = (loss_b,) + outputs_b
+
+			kl = (self.compute_kl_loss(logits_a, logits_b) * 5,)
+
+			# print('--------------------------------------------')
+			# compute_kl_loss 一个数值
+
+		return outputs_a + outputs_b+ kl # (loss), logits, (hidden_states), (attentions)
 
 @add_start_docstrings(
 	"""Bert Model with a multiple choice classification head on top (a linear layer on top of

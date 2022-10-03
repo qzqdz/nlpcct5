@@ -98,7 +98,7 @@ def convert_bertabs_checkpoints(path_to_checkpoints, dump_path):
     # -------------------
 
     logging.info("convert the model")
-    new_model.bert_a.load_state_dict(original.bert_a.state_dict())
+    new_model.bert.load_state_dict(original.bert.state_dict())
     new_model.decoder.load_state_dict(original.decoder.state_dict())
     new_model.generator.load_state_dict(original.generator.state_dict())
 

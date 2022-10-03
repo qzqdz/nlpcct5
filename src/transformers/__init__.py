@@ -169,7 +169,7 @@ if is_torch_available():
         MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING,
     )
 
-    from .modeling_bert import (
+    from .modeling_bert_backup import (
         BertPreTrainedModel,
         BertModel,
         BertForPreTraining,

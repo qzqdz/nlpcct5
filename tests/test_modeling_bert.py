@@ -35,7 +35,7 @@ if is_torch_available():
         BertForTokenClassification,
         BertForMultipleChoice,
     )
-    from transformers.modeling_bert import BERT_PRETRAINED_MODEL_ARCHIVE_MAP
+    from transformers.modeling_bert_backup import BERT_PRETRAINED_MODEL_ARCHIVE_MAP
 
 
 @require_torch
