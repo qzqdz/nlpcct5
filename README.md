@@ -46,11 +46,13 @@
 <p>loss的计算方法为两loss求和/2+5*kl</p>
 
 <p><h4>2022/10/4</h4></p>
-<p>12.src\transformers\modeling_bert.py</p>
-<p>加入level1的标签权重处理</p>
-
-
-
+<p>13.src\transformers\modeling_bert.py</p>
+<p>现在bert和backup bert 不重叠了</p>
+<p>14.加入了ruters数据集</p>
+<p>15.规范化bert的权重加和</p>
+<p>16.写结果分析脚本</p>
+<p> </p>
+<p> --------- </p>
 训练命令：
 CUDA_VISIBLE_DEVICES=7 python ./examples/run_glue.py     
 --model_type bert     
@@ -83,6 +85,8 @@ python ./examples/run_glue.py
 --learning_rate 2e-5     
 --num_train_epochs 3.0     
 --output_dir ./output_dir/nlpcct5/
+
+
 
 
 paperwithcode中的开源多标签分类模型
