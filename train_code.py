@@ -204,6 +204,8 @@ python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/
 bertclo_lr20_bs8_256_lv1
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/bertclo_lr10_bs4_256_lv1     --task_name nlpcct5level1    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 256     --per_gpu_eval_batch_size=8       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir D:/model/bertclo_lr20_bs8_256_lv1/output_dir/
 
+bertclo_lr10_bs4_256_lv1
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path D:/model/bertclo_lr10_bs4_512_lv1     --task_name nlpcct5level1    --do_train     --do_eval     --do_lower_case     --data_dir D:/data/nlpcct5/training_datasets     --max_seq_length 256     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir D:/model/bertclo_lr10_bs4_256_lv1/output_dir/
 
 
 level2_label bert bese
