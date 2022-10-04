@@ -19,6 +19,7 @@ try:
 	from scipy.stats import pearsonr, spearmanr
 	from sklearn.metrics import matthews_corrcoef, f1_score,recall_score
 
+
 	_has_sklearn = True
 except (AttributeError, ImportError):
 	_has_sklearn = False
@@ -32,6 +33,11 @@ import numpy as np
 if _has_sklearn:
 
 	def simple_accuracy(preds, labels):
+		print(preds)
+		print('------------------------------------')
+		print(labels)
+		print('------------------------------------')
+		print(preds == labels)
 		return (preds == labels).mean()
 
 	def acc_and_f1(preds, labels):
@@ -80,12 +86,16 @@ if _has_sklearn:
 		elif task_name == "desccls":
 			return {"acc": simple_accuracy(preds, labels)}
 
-		elif task_name == 'allnlpcct5' or task_name == 'nlpcct5level1' or task_name == 'nlpcct5level2' or task_name == 'nlpcct5level3':
+		elif task_name == 'allnlpcct5' or task_name == 'nlpcct5level1' or task_name == 'nlpcct5level2' or task_name == 'nlpcct5level3'  or task_name == 'reuters':
+
+			# sigmoid_preds = preds
 			sigmoid_preds = sigmoid_function(preds)
-			sigmoid_preds = np.greater(sigmoid_preds,0.5).astype(np.float32)
-			r = recall_score(labels, sigmoid_preds,average=None)
-			micro_f1 = f1_score(labels,sigmoid_preds,average='micro')
+			sigmoid_preds = np.greater(sigmoid_preds,0.5).astype(np.int32)
+			macro_r = recall_score(labels, sigmoid_preds,average='macro')
+			micro_r = recall_score(labels, sigmoid_preds, average='micro')
+
 			macro_f1 = f1_score(labels,sigmoid_preds,average='macro')
+			micro_f1 = f1_score(labels, sigmoid_preds, average='micro')
 
 			if not os.path.exists('./eval_res/'):
 				os.mkdir('./eval_res/')
@@ -97,9 +107,10 @@ if _has_sklearn:
 
 			return {
 				'acc':simple_accuracy(sigmoid_preds,labels),
-				'recall': r,
+				'macro_r': macro_r,
+				'micro_r': micro_r,
 				'macro_f1':macro_f1,
-				'micro_f1':micro_f1
+				'micro_f1':micro_f1,
 			}
 
 		else:
