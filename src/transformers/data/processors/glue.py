@@ -556,10 +556,10 @@ class DescCLSProcessor(DataProcessor):
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
 		return examples
 
-def read_label(level_id):
-	path = f'./label_dir/level{level_id}_label.txt'
+def read_label(class_name):
+	path = f'./label_dir/{class_name}_label.txt'
 	if not os.path.exists(path):
-		path = f'./src/transformers/data/processors/label_dir/level{level_id}_label.txt'
+		path = f'./src/transformers/data/processors/label_dir/{class_name}_label.txt'
 	with open(path,'r',encoding='utf-8') as f:
 		label_lst = eval(f.read())
 	return label_lst
@@ -648,7 +648,6 @@ class Nlpcct5Processor(DataProcessor):
 			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
 		return examples
 
-
 class Nlpcct5Level1Processor(DataProcessor):
 
 	"""Processor for the WNLI data set (GLUE version)."""
@@ -673,13 +672,13 @@ class Nlpcct5Level1Processor(DataProcessor):
 	def get_labels(self):
 		"""See base class."""
 
-		return read_label(1)
+		return read_label('level1')
 
 	def _create_examples(self, lines, set_type):
 		"""Creates examples for the training and dev sets."""
 		examples = []
 
-		labels = read_label(1)
+		labels = read_label('level1')
 
 
 		if type(lines)==type([]):
@@ -720,13 +719,13 @@ class Nlpcct5Level2Processor(DataProcessor):
 	def get_labels(self):
 		"""See base class."""
 
-		return read_label(2)
+		return read_label('level2')
 
 	def _create_examples(self, lines, set_type):
 		"""Creates examples for the training and dev sets."""
 		examples = []
 
-		labels = read_label(2)
+		labels = read_label('level2')
 
 
 		if type(lines)==type([]):
@@ -767,13 +766,13 @@ class Nlpcct5Level3Processor(DataProcessor):
 	def get_labels(self):
 		"""See base class."""
 
-		return read_label(3)
+		return read_label('level3')
 
 	def _create_examples(self, lines, set_type):
 		"""Creates examples for the training and dev sets."""
 		examples = []
 
-		labels = read_label(3)
+		labels = read_label('level3')
 		# print(len(labels))
 
 		if type(lines)==type([]):
@@ -790,7 +789,50 @@ class Nlpcct5Level3Processor(DataProcessor):
 
 		return examples
 
+class reutersProcessor(DataProcessor):
+	"""Processor for the reuters data set (GLUE version)."""
 
+	def get_example_from_tensor_dict(self, tensor_dict):
+		"""See base class."""
+		return InputExample(
+			tensor_dict["idx"].numpy(),
+			tensor_dict["sentence1"].numpy().decode("utf-8"),
+			tensor_dict["sentence2"].numpy().decode("utf-8"),
+			str(tensor_dict["label"].numpy()),
+		)
+
+	def get_train_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "train_set.json")), "train")
+
+	def get_dev_examples(self, data_dir):
+		"""See base class."""
+		return self._create_examples(self._read_json(os.path.join(data_dir, "val_set.json")), "dev")
+
+	def get_labels(self):
+		"""See base class."""
+
+		return read_label('reuters')
+
+	def _create_examples(self, lines, set_type):
+		"""Creates examples for the training and dev sets."""
+		examples = []
+
+		labels = read_label('reuters')
+		# print(len(labels))
+
+		if type(lines)==type([]):
+			lines = lines[0]
+
+		for (i, line) in enumerate(lines):
+			guid = "%s-%s" % (set_type, str(i))
+			text_a = line["title"]
+			text_b = line["abstract"]
+			label = [0] * len(labels)
+			for j in line["level4"]:
+				label[labels.index(j)] = 1
+			examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+		return examples
 
 class Nlpcct5alllabelProcessor(DataProcessor):
 
@@ -816,9 +858,9 @@ class Nlpcct5alllabelProcessor(DataProcessor):
 	def get_labels(self):
 		"""See base class."""
 
-		level1_label = read_label(1)
-		level2_label = read_label(2)
-		level3_label = read_label(3)
+		level1_label = read_label('level1')
+		level2_label = read_label('level2')
+		level3_label = read_label('level3')
 
 		return level1_label+level2_label+level3_label
 
@@ -826,9 +868,9 @@ class Nlpcct5alllabelProcessor(DataProcessor):
 		"""Creates examples for the training and dev sets."""
 		examples = []
 
-		level1_label = read_label(1)
-		level2_label = read_label(2)
-		level3_label = read_label(3)
+		level1_label = read_label('level1')
+		level2_label = read_label('level2')
+		level3_label = read_label('level3')
 		def make_label(label_lst:list,level_label:list):
 			onehotlabel = [0]*len(level_label)
 			for label in label_lst:
@@ -867,6 +909,7 @@ glue_tasks_num_labels = {
 	"nlpcct5level2": 260,
 	"nlpcct5level3": 1272,
 	'allnlpcct5':1553,
+	'reuters':90,
 }
 
 glue_processors = {
@@ -884,7 +927,7 @@ glue_processors = {
 	"nlpcct5level1": Nlpcct5Level1Processor,
 	'nlpcct5level2': Nlpcct5Level2Processor,
 	'nlpcct5level3': Nlpcct5Level3Processor,
-
+	'reuters':reutersProcessor,
 	# 'allnlpcct5':Nlpcct5alllabelProcessor,
 }
 
@@ -902,5 +945,6 @@ glue_output_modes = {
 	"desccls": "classification",
 	"nlpcct5level1": "multilabel_classification",
 	"nlpcct5level3": "multilabel_classification",
+	"reuters": "multilabel_classification",
 	# 'allnlpcct5':'multilabel_classification',
 }

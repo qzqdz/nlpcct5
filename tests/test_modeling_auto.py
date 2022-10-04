@@ -40,7 +40,7 @@ if is_torch_available():
         AutoModelForTokenClassification,
         BertForTokenClassification,
     )
-    from transformers.modeling_bert_backup import BERT_PRETRAINED_MODEL_ARCHIVE_MAP
+    from transformers.modeling_bert import BERT_PRETRAINED_MODEL_ARCHIVE_MAP
     from transformers.modeling_auto import (
         MODEL_MAPPING,
         MODEL_FOR_PRETRAINING_MAPPING,

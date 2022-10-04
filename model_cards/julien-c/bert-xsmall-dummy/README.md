@@ -3,7 +3,7 @@
 
 ```python
 from transformers.configuration_bert import BertConfig
-from transformers.modeling_bert_backup import BertForMaskedLM
+from transformers.modeling_bert import BertForMaskedLM
 from transformers.modeling_tf_bert import TFBertForMaskedLM
 from transformers.tokenization_bert import BertTokenizer
 
