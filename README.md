@@ -45,6 +45,10 @@
 <p>后面的output全部复制粘贴一份</p>
 <p>loss的计算方法为两loss求和/2+5*kl</p>
 
+<p><h4>2022/10/4</h4></p>
+<p>12.src\transformers\modeling_bert.py</p>
+<p>加入level1的标签权重处理</p>
+
 
 
 训练命令：
