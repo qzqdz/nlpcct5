@@ -90,9 +90,10 @@ python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/
 test
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/reuters_bertbase_lr20_bs8_512_lv1/output_dir/checkpoint-2500     --task_name reuters  --do_eval     --do_lower_case     --data_dir E:/data/reuters     --max_seq_length 512     --per_gpu_eval_batch_size=16       --per_gpu_train_batch_size=8       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir E:/model/reuters_bertbase_lr20_bs8_512_lv1/output_dir/checkpoint-2500/
 
-reuters_bertclols_lr20_bs8_512_lv1
-python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/reuters_bertclols_lr20_bs8_512_lv1     --task_name reuters    --do_train   --do_eval     --do_lower_case     --data_dir E:/data/reuters     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir E:/model/reuters_bertclols_lr20_bs8_512_lv1/output_dir/
-
+reuters_bertls_lr20_bs8_512_lv1
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/reuters_bertclols_lr20_bs8_256_lv1     --task_name reuters    --do_train   --do_eval     --do_lower_case     --data_dir E:/data/reuters     --max_seq_length 256     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir E:/model/reuters_bertclols_lr20_bs8_256_lv1/output_dir/
+test
+python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/model/reuters_bertclols_lr20_bs8_256_lv1     --task_name reuters    --do_train    --do_eval    --do_lower_case     --data_dir E:/data/reuters     --max_seq_length 256     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=4       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir E:/model/reuters_bertclols_lr20_bs8_256_lv1/output_dir/tt/
 
 res test
 robertabase_lr10_bs3_512_lv3
@@ -107,6 +108,8 @@ python ./examples/run_glue.py     --model_type bert     --model_name_or_path E:/
 
 bertbase_lr10_bs3_512_lv1_1 15:43
 python ./examples/run_glue.py     --model_type bert     --model_name_or_path F:/model/bertbase_lr10_bs3_512_lv1_1/output_dir/checkpoint-90000     --task_name nlpcct5level1   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=3       --per_gpu_train_batch_size=3       --learning_rate 1e-5     --num_train_epochs 3.0     --output_dir F:/model/bertbase_lr10_bs3_512_lv1_1/output_dir/checkpoint-90000/
+v4
+
 
 xlnetbase_lr20_bs2_512_lv1 15:57
 python ./examples/run_glue.py     --model_type xlnet     --model_name_or_path F:/model/xlnetbase_lr20_bs2_512_lv1/output_dir/checkpoint-67500     --task_name nlpcct5level1   --do_eval     --do_lower_case     --data_dir D:/study/nlpcc/traning_datasets     --max_seq_length 512     --per_gpu_eval_batch_size=4       --per_gpu_train_batch_size=2       --learning_rate 2e-5     --num_train_epochs 3.0     --output_dir F:/model/xlnetbase_lr20_bs2_512_lv1/output_dir/checkpoint-67500/
@@ -148,9 +151,41 @@ micro_f1 = 0.4905569444862796
 
 
 
+vrsion 4
+bert_test_for_4
+wnli
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py     --model_name_or_path E:/model/bert_test_for_4     --train_file E:/data/wnli/train.json  --validation_file   E:/data/wnli/validation.json  --max_length 512   --do_train True  --report_to wandb   --per_device_eval_batch_size 4    --learning_rate 1e-5     --num_train_epochs 3   --output_dir E:/model/bert_test_for_4/output_dir/  --with_tracking
+
+test
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py     --model_name_or_path E:/model/bert_test_for_4     --train_file E:/data/wnli/train.json  --validation_file   E:/data/wnli/validation.json  --max_length 512  --per_device_eval_batch_size 4    --learning_rate 1e-5     --num_train_epochs 3    --output_dir E:/model/bert_test_for_4/output_dir/
+
+cola
+train
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py     --model_name_or_path E:/model/bert_test_for_4   --do_train True   --train_file E:/data/cola/train.csv  --validation_file   E:/data/cola/test.csv  --max_length 512  --report_to wandb   --per_device_eval_batch_size 4    --learning_rate 1e-5     --num_train_epochs 3   --checkpointing_steps 100 --output_dir E:/model/bert_test_for_4/output_dir/  --with_tracking
+
+reuters test
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py     --model_name_or_path E:/model/reuters_bertclols_lr20_bs8_256_lv1     --train_file E:/data/reuters21578/reuters21578.py --max_length 256  --report_to wandb   --per_device_eval_batch_size 8    --learning_rate 2e-5     --num_train_epochs 3   --checkpointing_steps 100 --output_dir E:/model/bert_test_for_4/output_dir/  --with_tracking
+
+raft
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py     --model_name_or_path E:/model/bert_test_for_4     --train_file E:/data/raft/raft.py --max_length 256  --report_to wandb   --per_device_eval_batch_size 8    --learning_rate 2e-5     --num_train_epochs 3   --checkpointing_steps 100 --output_dir E:/model/bert_test_for_4/output_dir/  --with_tracking
+
+nlpcc
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py     --model_name_or_path E:/model/bert_test_for_4     --train_file E:/data/nlpcct5/nlpcct5.py  --max_length 512   --do_train True  --report_to wandb   --per_device_eval_batch_size 4    --learning_rate 1e-5     --num_train_epochs 3   --output_dir E:/model/bert_test_for_4/output_dir/  --with_tracking
+
+E:/data/nlpcct5/nlpcct5.py
+
+
+test
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py    --model_name_or_path E:/model/bertclols_lr10_bs4_256_lv1/output_dir/checkpoint-67500     --train_file E:/data/nlpcct5/nlpcct5.py  --multicheck False  --report_to wandb   --with_tracking      --max_length 512     --per_device_eval_batch_size 4    --num_train_epochs 3     --output_dir E:/model/bertclols_lr10_bs4_256_lv1/output_dir/checkpoint-67500/
+train
+bertbase_lr20_bs8_256_lv1
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py    --model_name_or_path E:/model/bertbase_lr20_bs8_256_lv1     --train_file E:/data/nlpcct5/nlpcct5.py  --do_train True  --report_to wandb   --with_tracking      --max_length 256    --per_device_eval_batch_size 8    --num_train_epochs 3     --output_dir E:/model/bertbase_lr20_bs8_256_lv1/output_dir/  --checkpointing_steps 100
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py    --model_name_or_path E:/model/bertbase_lr20_bs8_256_lv1/output_dir     --train_file E:/data/nlpcct5/nlpcct5.py     --max_length 256    --per_device_eval_batch_size 8    --num_train_epochs 3     --output_dir E:/model/bertbase_lr20_bs8_256_lv1/output_dir/
 
 
 
+train for test
+python ./examples/pytorch/text-classification/run_glue_no_trainer.py    --model_name_or_path E:/model/bert_for_test     --train_file E:/data/nlpcct5/nlpcct5.py  --do_train True  --report_to wandb   --with_tracking      --max_length 64    --per_device_eval_batch_size 32    --num_train_epochs 3     --output_dir E:/model/bertbase_lr20_bs8_256_lv1/output_dir/  --checkpointing_steps 100
 
 '''
 
